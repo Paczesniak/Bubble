@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/SongController.php
 
 namespace App\Http\Controllers;
 
@@ -99,13 +98,19 @@ class SongController extends Controller
     }
 
     public function destroy(Song $song)
-    {
-        if (Auth::check() && (Auth::id() === $song->user_id || Auth::user()->role == 'admin')) {
-            $song->delete();
-            return redirect()->route('songs.index')->with('success', 'Song deleted successfully.');
-        }
-        return redirect()->route('songs.index')->with('error', 'You do not have permission to delete this song.');
+{
+    if (Auth::check() && (Auth::id() === $song->user_id || Auth::user()->role == 'admin')) {
+
+        UserSong::where('song_id', $song->id)->delete();
+
+        $song->delete();
+
+        return redirect()->route('songs.index')->with('success', 'Song deleted successfully.');
     }
+
+    return redirect()->route('songs.index')->with('error', 'You do not have permission to delete this song.');
+}
+
 
     public function addToFavorites($songId)
     {

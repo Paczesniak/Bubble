@@ -17,18 +17,11 @@ class Song extends Model
         return $this->belongsTo(User::class);
     }
 
-    // app/Models/Song.php
+
 
 public function favoritedBy()
 {
     return $this->belongsToMany(User::class, 'user_songs', 'song_id', 'user_id')->using(UserSong::class);
-}
-
-// app/Models/Song.php
-
-public function getIsFavoriteAttribute()
-{
-    return $this->favorites()->where('user_id', Auth::id())->exists();
 }
 
 
